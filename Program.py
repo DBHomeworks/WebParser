@@ -18,8 +18,6 @@ def parse_page():
     tree = html.fromstring(page.content)
     link = tree.xpath('//a[not(@class)]/@href')
 
-    print link
-
     page_number = 0
     i = 0
 
@@ -56,7 +54,33 @@ def parse_page():
         i += 1
 
 
-    doc.write('data.xml', xml_declaration=True, encoding='utf-16')
+    doc.write('task1.xml', xml_declaration=True, encoding='utf-16')
+
+def task2():
+    tree = etree.parse('task1.xml')
+
+    url_list = []
+    image_count_list = []
+
+    for item in tree.xpath('//page'):
+        subfields = item.getchildren()
+        count = len([subfield.attrib["type"] for subfield in subfields if subfield.attrib["type"] == "image"])
+
+        print item.attrib["url"]
+        print count
+
+        url_list.append([item.attrib["url"]])
+        image_count_list.append(count)
+
+    # print url_list
+    # print image_count_list
+
+    index = image_count_list.index(min(image_count_list))
+
+    print "Minimum count of image has the following url: ", url_list[index], " : ", image_count_list[index]
 
 
-parse_page()
+# parse_page()
+
+task2()
+
