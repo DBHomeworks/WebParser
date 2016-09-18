@@ -79,8 +79,49 @@ def task2():
 
     print "Minimum count of image has the following url: ", url_list[index], " : ", image_count_list[index]
 
+def webshop_parser():
+    page = requests.get('http://wallet.ua/c/f-briefcases_for_men/')
+    tree = html.fromstring(page.content)
+    products = tree.xpath('//div[@id="catalog"]/div[@class="catalog-section"]//table[@class="item_info"]')
+    return [{
+                "image": get_image(product),
+                "name": get_product_name(product),
+                "price": get_product_price(product)
+            } for product in products]
+
+def get_image(product):
+        image = product.xpath('.//a[@class="multy-img"]/img[@class="second-picture"]')[0]
+
+        return {"src": "http://wallet.ua" + image.xpath('.//@src')[0],
+                                "description": image.xpath('.//@alt')[0]}
+
+def get_product_name(product):
+    return product.xpath('.//tr/td[@align="left"]/a/text()')[0].strip()
+
+def get_product_price(product):
+    return product.xpath('.//span[@class="catalog-price crate"]/text()')[0].strip()
+
+def write_to_file():
+    root = etree.Element('data')
+    doc = etree.ElementTree(root)
+
+    bag_number = 1
+
+    for item in webshop_parser():
+        bag = etree.SubElement(root, 'bag')
+        name = etree.SubElement(bag, 'name', value=item['name'])
+        price = etree.SubElement(bag, 'price', value=item['price'])
+        name = etree.SubElement(bag, 'image', value=item['image']['src'])
+        description = etree.SubElement(bag, 'description', value=item['image']['description'])
+
+    doc.write('task4.xml', xml_declaration=True, encoding='utf-16')
+
 
 # parse_page()
 
-task2()
+# task2()
+
+# write_to_file()
+
+
 
