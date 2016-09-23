@@ -122,6 +122,3 @@ def write_to_file():
 # task2()
 
 # write_to_file()
-
-
-
