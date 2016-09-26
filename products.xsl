@@ -23,9 +23,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <td>
                                 <xsl:value-of select="price/@value"/>
                             </td>
-                            <img>
-                                <td><xsl:value-of select="image/@value"/></td>
-                            </img>
+                            <td>
+                                <img>
+                                    <xsl:attribute name="scr">
+                                        <xsl:value-of select="image/@value"/>
+                                    </xsl:attribute>
+                                </img>
+                            </td>
                             <td>
                                 <xsl:value-of select="description/@value"/>
                             </td>
